@@ -2,8 +2,8 @@
 
 Welcome to the Registration Operations's Github repository! 
 
-[![PyPI](https://img.shields.io/pypi/v/pilab_binama?label=pypi%20package)](https://pypi.org/project/pilab_regis/)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/pilab_binama)](https://pypi.org/project/pilab_regis/)
+[![PyPI](https://img.shields.io/pypi/v/pilab_regis?label=pypi%20package)](https://pypi.org/project/pilab_regis/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/pilab_regis)](https://pypi.org/project/pilab_regis/)
 
 ## Description
 
