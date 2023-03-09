@@ -165,8 +165,8 @@ def find_transform(moving_file: str, static_file: str,
 
 def apply_transform(moving_file: str, mapping, static_file: str = '',
                     output_path: str = '', binary: bool = False,
-                    binary_thresh: float = 0.5, inverse: bool = False,
-                    mask_file: str = ''):
+                    binary_thresh: float = 0.5, labels: bool = False,
+                    inverse: bool = False, mask_file: str = ''):
     '''
 
 
@@ -183,8 +183,11 @@ def apply_transform(moving_file: str, mapping, static_file: str = '',
     binary : bool, optional
         If True, outputs a binary mask. The default is False.
     binary_thresh : float, optional
-        if 'binary'==True, all values above this threshold are set to 1.
+        If 'binary'==True, all values above this threshold are set to 1.
         The default is 0.5.
+    labels : bool, optional
+        Set as True if the moving file is a labelled parcelation.
+        The default is False.
     inverse : bool, optional
         If True, the inverse transformation is applied. The default is False.
     mask_file : str, optional
@@ -207,10 +210,17 @@ def apply_transform(moving_file: str, mapping, static_file: str = '',
         mask = nib.load(mask_file).get_fdata()
         moving_data *= mask
 
-    if inverse:
-        transformed = mapping.transform_inverse(moving_data)
+    if labels:
+        interpolation = 'nearest'
     else:
-        transformed = mapping.transform(moving_data)
+        interpolation = 'linear'
+
+    if inverse:
+        transformed = mapping.transform_inverse(moving_data,
+                                                interpolation=interpolation)
+    else:
+        transformed = mapping.transform(moving_data,
+                                        interpolation=interpolation)
 
     if binary:
         transformed = np.where(transformed > binary_thresh, 1, 0)
