@@ -168,7 +168,8 @@ def apply_transform(moving_file: str, mapping, static_file: str = '',
                     binary_thresh: float = 0.5, labels: bool = False,
                     inverse: bool = False, mask_file: str = ''):
     '''
-
+    Applies the transformation obtained from find_transform() in 'mapping' to a
+    moving file.
 
     Parameters
     ----------
@@ -195,8 +196,8 @@ def apply_transform(moving_file: str, mapping, static_file: str = '',
 
     Returns
     -------
-    transformed : TYPE
-        DESCRIPTION.
+    transformed : 3-D array of shape (x,y,z)
+        Transformed array.
 
     '''
 
@@ -224,6 +225,9 @@ def apply_transform(moving_file: str, mapping, static_file: str = '',
 
     if binary:
         transformed = np.where(transformed > binary_thresh, 1, 0)
+
+    if labels:
+        transformed = transformed.astype(int)
 
     if len(output_path) > 0:
 
