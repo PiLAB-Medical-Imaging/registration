@@ -76,7 +76,7 @@ def find_transform(moving_file: str, static_file: str,
         static = static/np.max(static)
         moving = moving/np.max(moving)
 
-    if hard_static_mask:
+    if type(hard_static_mask) is np.ndarray:
         static *= hard_static_mask
 
     # Affine registration ------------------------------------------------------
