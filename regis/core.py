@@ -24,7 +24,8 @@ def find_transform(moving_file: str, static_file: str,
                    only_affine: bool = False, diffeomorph: bool = True,
                    level_iters_diff=[10000, 1000, 100],
                    sanity_check: bool = False, normalize: bool = False,
-                   static_mask=None, moving_mask=None):
+                   static_mask=None, moving_mask=None,
+                   hard_static_mask=None):
     '''
     If volume are 4D+, only the first 3D volume is taken into account.
 
@@ -50,6 +51,9 @@ def find_transform(moving_file: str, static_file: str,
     moving_mask : array, optional
         Moving image mask that defines which pixels in the moving image
         are used to calculate the mutual information.
+    hard_static_mask : array, optional
+        Static image mask that defines which pixels in the static image
+        are not set to 0 (black).
 
     Returns
     -------
@@ -71,6 +75,9 @@ def find_transform(moving_file: str, static_file: str,
     if normalize:
         static = static/np.max(static)
         moving = moving/np.max(moving)
+
+    if hard_static_mask:
+        static *= hard_static_mask
 
     # Affine registration ------------------------------------------------------
 
