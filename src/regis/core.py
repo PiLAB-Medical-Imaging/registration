@@ -21,8 +21,8 @@ from dipy.align.imwarp import SymmetricDiffeomorphicRegistration
 
 
 def find_transform(moving_file: str, static_file: str,
-                   only_affine: bool = False, diffeomorph: bool = True,
-                   level_iters_diff=[10000, 1000, 100],
+                   only_affine: bool = False, level_iters=[10000, 1000, 100],
+                   diffeomorph: bool = True, level_iters_diff=[10000, 1000, 100],
                    sanity_check: bool = False, normalize: bool = False,
                    static_mask=None, moving_mask=None,
                    hard_static_mask=None):
@@ -38,8 +38,16 @@ def find_transform(moving_file: str, static_file: str,
     only_affine : bool, optional
         Registers using only the affine information of both files.
         The default is False.
+    level_iters : list, optional
+        Number of iterations to perform per 'scale' of the image, greater scales
+        first. The size of possible deformations increases with the scale. The
+        default is [10000, 1000, 100].
     diffeomorph : bool, optional
         If False then registration is only affine. The default is True.
+    level_iters_diff : list, optional
+        Number of iterations to perform per 'scale' of the image for the
+        diffeomorphic step, greater scales first. The size of possible
+        deformations increases with the scale. The default is [10000, 1000, 100].
     sanity_check : bool, optional
         If True then prints figures. The default is False.
     normalize : bool, optional
@@ -109,9 +117,6 @@ def find_transform(moving_file: str, static_file: str,
     sampling_prop = None
     metric = MutualInformationMetric(nbins, sampling_prop)
 
-    # !!!
-    level_iters = [10000, 1000, 100]
-    # level_iters = [1000, 100, 10]
     sigmas = [3.0, 1.0, 0.0]
     factors = [4, 2, 1]
     affreg = AffineRegistration(metric=metric,
