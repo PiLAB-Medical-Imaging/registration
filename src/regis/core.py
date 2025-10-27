@@ -115,7 +115,8 @@ def find_transform(moving_file: str, static_file: str,
 
     nbins = 32
     sampling_prop = None
-    metric = MutualInformationMetric(nbins, sampling_prop)
+    metric = MutualInformationMetric(nbins=nbins,
+                                     sampling_proportion=sampling_prop)
 
     sigmas = [3.0, 1.0, 0.0]
     factors = [4, 2, 1]
@@ -127,21 +128,24 @@ def find_transform(moving_file: str, static_file: str,
     transform = TranslationTransform3D()
     params0 = None
     translation = affreg.optimize(static, moving, transform, params0,
-                                  static_grid2world, moving_grid2world,
+                                  static_grid2world=static_grid2world,
+                                  moving_grid2world=moving_grid2world,
                                   starting_affine=c_of_mass.affine,
                                   static_mask=static_mask,
                                   moving_mask=moving_mask)
 
     transform = RigidTransform3D()
     rigid = affreg.optimize(static, moving, transform, params0,
-                            static_grid2world, moving_grid2world,
+                            static_grid2world=static_grid2world,
+                            moving_grid2world=moving_grid2world,
                             starting_affine=translation.affine,
                             static_mask=static_mask,
                             moving_mask=moving_mask)
 
     transform = AffineTransform3D()
     affine = affreg.optimize(static, moving, transform, params0,
-                             static_grid2world, moving_grid2world,
+                             static_grid2world=static_grid2world,
+                             moving_grid2world=moving_grid2world,
                              starting_affine=rigid.affine,
                              static_mask=static_mask,
                              moving_mask=moving_mask)
