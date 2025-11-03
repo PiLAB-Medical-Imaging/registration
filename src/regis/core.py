@@ -2,7 +2,7 @@
 """
 Created on Wed Mar  1 16:37:35 2023
 
-@author: pilab
+@author: DELINTE Nicolas & Pilab
 """
 
 import numpy as np
@@ -10,12 +10,9 @@ import nibabel as nib
 from dipy.viz import regtools
 from dipy.io.image import load_nifti
 from dipy.align.metrics import CCMetric
-from dipy.align.imaffine import (transform_centers_of_mass,
-                                 AffineMap,
-                                 MutualInformationMetric,
-                                 AffineRegistration)
-from dipy.align.transforms import (TranslationTransform3D,
-                                   RigidTransform3D,
+from dipy.align.imaffine import (transform_centers_of_mass, AffineMap,
+                                 MutualInformationMetric, AffineRegistration)
+from dipy.align.transforms import (TranslationTransform3D, RigidTransform3D,
                                    AffineTransform3D)
 from dipy.align.imwarp import SymmetricDiffeomorphicRegistration
 
@@ -93,8 +90,10 @@ def find_transform(moving_file: str, static_file: str,
 
         identity = np.eye(4)
         affine_map = AffineMap(identity,
-                               static.shape, static_grid2world,
-                               moving.shape, moving_grid2world)
+                               domain_grid_shape=static.shape,
+                               domain_grid2world=static_grid2world,
+                               codomain_grid_shape=moving.shape,
+                               codomain_grid2world=moving_grid2world)
 
         if sanity_check:
             resampled = affine_map.transform(moving)
