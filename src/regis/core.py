@@ -155,10 +155,13 @@ def find_transform(moving_file: str, static_file: str,
 
         metric = CCMetric(3)
 
-        sdr = SymmetricDiffeomorphicRegistration(metric, level_iters_diff)
+        sdr = SymmetricDiffeomorphicRegistration(metric,
+                                                 level_iters=level_iters_diff)
 
-        mapping = sdr.optimize(static, moving, static_affine, moving_affine,
-                               affine.affine)
+        mapping = sdr.optimize(static, moving,
+                               static_grid2world=static_affine,
+                               moving_grid2world=moving_affine,
+                               prealign=affine.affine)
 
     else:
 
