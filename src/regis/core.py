@@ -82,7 +82,12 @@ def find_transform(moving_file: str, static_file: str,
         moving = moving/np.max(moving)
 
     if type(hard_static_mask) is np.ndarray:
+        print('Using hard mask from numpy array')
         static *= hard_static_mask
+    elif type(hard_static_mask) is str:
+        print('Using hard mask from file')
+        mask = nib.load(hard_static_mask).get_fdata()
+        static *= mask
 
     # Affine registration ------------------------------------------------------
 
@@ -98,12 +103,15 @@ def find_transform(moving_file: str, static_file: str,
         if sanity_check:
             resampled = affine_map.transform(moving)
 
-            regtools.overlay_slices(static, resampled, None, 0,
-                                    "Static", "Moving", "resampled_0.png")
-            regtools.overlay_slices(static, resampled, None, 1,
-                                    "Static", "Moving", "resampled_1.png")
-            regtools.overlay_slices(static, resampled, None, 2,
-                                    "Static", "Moving", "resampled_2.png")
+            regtools.overlay_slices(static, resampled, slice_index=None,
+                                    slice_type=0, ltitle="Static",
+                                    rtitle="Moving", fname="resampled_0.png")
+            regtools.overlay_slices(static, resampled, slice_index=None,
+                                    slice_type=1, ltitle="Static",
+                                    rtitle="Moving", fname="resampled_1.png")
+            regtools.overlay_slices(static, resampled, slice_index=None,
+                                    slice_type=2, ltitle="Static",
+                                    rtitle="Moving", fname="resampled_2.png")
 
         if only_affine:
 
@@ -171,12 +179,15 @@ def find_transform(moving_file: str, static_file: str,
 
         transformed = mapping.transform(moving)
 
-        regtools.overlay_slices(static, transformed, None, 0,
-                                "Static", "Transformed", "transformed.png")
-        regtools.overlay_slices(static, transformed, None, 1,
-                                "Static", "Transformed", "transformed.png")
-        regtools.overlay_slices(static, transformed, None, 2,
-                                "Static", "Transformed", "transformed.png")
+        regtools.overlay_slices(static, transformed, slice_index=None,
+                                slice_type=0, ltitle="Static",
+                                rtitle="Transformed", fname="transformed_0.png")
+        regtools.overlay_slices(static, transformed, slice_index=None,
+                                slice_type=1, ltitle="Static",
+                                rtitle="Transformed", fname="transformed_1.png")
+        regtools.overlay_slices(static, transformed, slice_index=None,
+                                slice_type=2, ltitle="Static",
+                                rtitle="Transformed", fname="transformed_2.png")
 
     return mapping
 
