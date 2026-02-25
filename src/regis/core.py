@@ -89,6 +89,11 @@ def find_transform(moving_file: str, static_file: str,
         mask = nib.load(hard_static_mask).get_fdata()
         static *= mask
 
+    if type(static_mask) is str:
+        static_mask = nib.load(static_mask).get_fdata()
+    if type(moving_mask) is str:
+        moving_mask = nib.load(moving_mask).get_fdata()
+
     # Affine registration ------------------------------------------------------
 
     if sanity_check or only_affine:
