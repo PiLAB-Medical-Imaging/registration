@@ -18,7 +18,8 @@ from dipy.align.imwarp import SymmetricDiffeomorphicRegistration
 
 
 def find_transform(moving_file: str, static_file: str,
-                   only_affine: bool = False, level_iters=[10000, 1000, 100],
+                   only_affine: bool = False, only_rigid: bool = False,
+                   level_iters=[10000, 1000, 100],
                    diffeomorph: bool = True, level_iters_diff=[10000, 1000, 100],
                    sanity_check: bool = False, normalize: bool = False,
                    static_mask=None, moving_mask=None,
@@ -35,6 +36,9 @@ def find_transform(moving_file: str, static_file: str,
     only_affine : bool, optional
         Registers using only the affine information of both files.
         The default is False.
+    only_rigid : bool, optional
+        Registers using only the affine information of both files and rigid
+        registration. The default is False.
     level_iters : list, optional
         Number of iterations to perform per 'scale' of the image, greater scales
         first. The size of possible deformations increases with the scale. The
@@ -153,6 +157,9 @@ def find_transform(moving_file: str, static_file: str,
                             starting_affine=translation.affine,
                             static_mask=static_mask,
                             moving_mask=moving_mask)
+
+    if only_rigid:
+        return rigid
 
     transform = AffineTransform3D()
     affine = affreg.optimize(static, moving, transform, params0,
